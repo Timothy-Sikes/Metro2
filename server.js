@@ -48,30 +48,10 @@ app.get('/blurp', function(req, res, next) {
   try {
     function callback(data)
     {
-      console.log("IN THE CALLBAXCK\n\n\*\n*\n*\n");
-      console.log("data.body");
-      console.log(data.body);
-      var body = data.body;
-      //var body = data.GetBody();
-      //console.log(body);
-      console.log(getMethods(data).join("\n"));
-      //console.log(data.GetBody);
-      var html = blurpTemplate({"data" : body });
+      var html = blurpTemplate({"data" : data.body });
       res.send(html);
     }
-    console.log("BLURP START\n*\n*\n*\n*");
-    console.log(getStops.getStops2(callback));
-    //console.log(getStops.getStops);
-    /*var stopFunction = getStops.getStops().then(function(result) {
-      console.log("\n*\n*\n\n\nCALLBACK\n\n\n*\n*\n");
-      console.log(result);
-    });
-    console.log("STOP FUNCTION");
-    console.log(stopFunction);
-    stopFunction();
-    console.log("stop function called.");
-    var html = blurpTemplate({ "data": stopFunction });
-      res.send(html)*/
+    getStops.getStops2(callback);
   } catch (e) {
     next(e)
   }

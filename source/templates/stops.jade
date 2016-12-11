@@ -1,5 +1,11 @@
 extend default
 
 block content
-	include selectStop
-	include selectStop
+	.col-md-4
+		h3 Departure
+		include selectStop
+	.col-md-4
+		h3 Arrival
+		include selectStop
+	.col-md-4
+		button(.btn-primary, on-click="submitStops") Submit

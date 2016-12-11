@@ -23,13 +23,6 @@ app.use(logger('dev'))
 app.use(express.static(__dirname + '/static'))
 app.use(express.static(path.join(__dirname, 'public')));
 
-fs.readdirSync('./controllers').forEach(function (file) {
-  if(file.substr(-3) == '.js') {
-      route = require('./controllers/' + file);
-      route.controller(app);
-  }
-});
-
 app.get('/', function (req, res, next) {
   try {
     var html = homeTemplate({ title: 'Test' })

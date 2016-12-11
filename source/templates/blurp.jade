@@ -1,0 +1,7 @@
+extend default
+
+block content
+	p #{data}
+	script.
+		console.log("!{JSON.stringify(data)}");
+	

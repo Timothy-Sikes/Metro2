@@ -3,19 +3,7 @@ var requestify = require('requestify');
 
 module.exports =
 {
-    /*getStops: function() {
-        return requestify.get('http://api.metro.net/agencies/lametro/routes/704/stops/').then(function(response) {
-        // Get the response body
-        console.log("We got the thing");
-        console.log(response.getBody());
-        response.GetBody();
-    }, function(response)
-    {
-        console.log("Error-ed");
-        console.log(response);
-    });
-    },*/
-    getStops2: function(callback, routeId) {
+    getStops: function(callback, routeId) {
         return requestify.get('http://api.metro.net/agencies/lametro/routes/' + routeId + '/stops/').then(function(response) {
             callback(response);
         });
@@ -42,11 +30,3 @@ module.exports =
                 "duration" : "Your travel should take 30 minutes!"};
     }
 };
-
-function getStops()
-{
-    return requestify.get('http://api.metro.net/agencies/lametro/routes/704/stops/').then(function(response) {
-        // Get the response body
-        response.getBody();
-    });
-}

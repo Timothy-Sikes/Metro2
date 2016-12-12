@@ -8,10 +8,10 @@ var express = require('express')
   ,homeTemplate = require('jade').compileFile(__dirname + '/source/templates/homepage.jade')
   ,stopTemplate = require('jade').compileFile(__dirname + '/source/templates/stop.jade')
   ,stopsTemplate = require('jade').compileFile(__dirname + '/source/templates/stops.jade')
-  ,blurpTemplate = require('jade').compileFile(__dirname + '/source/templates/blurp.jade')
+  ,mainTemplate = require('jade').compileFile(__dirname + '/source/templates/main.jade')
   ,travelTemplate = require('jade').compileFile(__dirname + '/source/templates/travel.jade')
   
-var getStops = require(__dirname + '/source/controllers/stops.js');
+var metro_client = require(__dirname + '/source/controllers/metro_client.js');
 var routeId = 704;
 
 app.set('port', process.env.PORT || 3000);
@@ -24,18 +24,26 @@ bootstrap.init({
   minified: true
 });
 
-app.use(logger('dev'))
-app.use(express.static(__dirname + '/static'))
+app.use(logger('dev'));
+app.use(express.static(__dirname + '/static'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res, next) {
   try {
-    var html = homeTemplate({ title: 'Test' })
-    res.send(html)
+     var departure;
+     var arrival;
+    function callback1(data)
+    {
+      departure = JSON.parse(data.body);
+      console.log(departure);
+      var html = mainTemplate(departure);
+      res.send(html);
+    }
+    metro_client.getStops(callback1, routeId);
   } catch (e) {
-    next(e)
+    next(e);
   }
-})
+});
 
 app.get('/test', function(req, res, next) {
   try {
@@ -46,7 +54,7 @@ app.get('/test', function(req, res, next) {
   }
 })
 
-app.get('/blurp', function(req, res, next) {
+app.get('/main', function(req, res, next) {
   try {
      var departure;
      var arrival;
@@ -54,10 +62,10 @@ app.get('/blurp', function(req, res, next) {
     {
       departure = JSON.parse(data.body);
       console.log(departure);
-      var html = blurpTemplate(departure);
+      var html = mainTemplate(departure);
       res.send(html);
     }
-    getStops.getStops2(callback1, routeId);
+    metro_client.getStops(callback1, routeId);
   } catch (e) {
     next(e);
   }
@@ -88,21 +96,21 @@ app.get('/travel', function(req, res, next){
     {
       console.log(data);
       departure = data.body;
-      getStops.getStop(callback2, req.param('arrival'));
+      metro_client.getStop(callback2, req.param('arrival'));
     }
     function callback2(data)
     {
       console.log(data);
       arrival = data.body;
       console.log({"departure" : JSON.parse(departure), "arrival" : JSON.parse(arrival) });
-      getStops.getPrediction(callback3, routeId, req.param('departure'));
+      metro_client.getPrediction(callback3, routeId, req.param('departure'));
     }
     function callback3(data)
     {
       console.log(data);
       prediction = JSON.parse(data.body);
       console.log(prediction);
-      var travelInfo = getStops.getTravelInfo();
+      var travelInfo = metro_client.getTravelInfo();
       console.log("before new JSON");
       console.log(travelInfo['message']);
       console.log(travelInfo['duration']);
@@ -134,7 +142,7 @@ app.get('/travel', function(req, res, next){
       res.send(html);
     }
     
-    getStops.getStop(callback1, req.param('departure'));
+    metro_client.getStop(callback1, req.param('departure'));
     
     //var html = travelTemplate({ "arrival" : {"display_name" : "test", "id" : req.param('departure') }, "departure" : {  "display_name" : "tesing", "id" : "4" } })
     //  res.send(html);

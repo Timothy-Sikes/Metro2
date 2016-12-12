@@ -7,3 +7,11 @@ Useful links:
 * https://naltatis.github.io/jade-syntax-docs/
 * https://webapplog.com/jade/
 
+# Instructions:
+
+* Download and install node at https://nodejs.org/en/
+* Run npm run watch
+* Navigate to http://localhost:3000
+
+# Notes
+  This is my first attempt at node, and also my second implementation of this project, so I didn't get everything completely functional.

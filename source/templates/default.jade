@@ -5,35 +5,16 @@ html
     link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
     link(rel='text/javascript', href='/scripts/metro.js')
     link(rel='text/javascript', href='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
-
-    title #{title}
-  body
-    .header
-      h1.page-title #{title}
-
-    ul.nav
-      li: a(href='/') Home
-      li: a(href='#news') News
-      li: a(href='#about') About
-      li: a(href='#contact') Contact
     
-    .main-content
+  body
+    .navbar.navbar-inverse.navbar-fixed-top
+      .container
+        .navbar-header
+          button(type='button', class='navbar-toggle', data-toggle='collapse', data-target='.navbar-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a(href='/') Home
+    .container.body-content
       block content
-
-   script.
-      function submitStops() {
-          var departure = $('#departureSelect').value;
-          var arrival = $('#arrivalSelect').value;
-
-          window.location.href = "/travel?departure=" + departure + "&arrival=" + arrival; 
-      }
       
-      $(document).ready(function() {
-        function submitStops() {
-          var departure = $('#departureSelect').value;
-          var arrival = $('#arrivalSelect').value;
-
-          window.location.href = "/travel?departure=" + departure + "&arrival=" + arrival; 
-        }  
-        $('button').click(function() { submitStops(); });
-        });

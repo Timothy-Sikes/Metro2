@@ -2,15 +2,15 @@ extend default
 
 block content
 	if travel_model.message != ''
-		.alert-warning #{travel_model.message}
-	h3 Travel information from #{travel_model.departure.display_name} to #{travel_model.arrival.display_name}
-	.jumbotron
+		.alert-warning(style='position:relative;bottom:-60px;') #{travel_model.message}
+	h3(style='position:relative;bottom:-60px;') Travel information from #{travel_model.departure.display_name} to #{travel_model.arrival.display_name}
+	.jumbotron(style='position:relative;bottom:-60px;')
 		if travel_model.next_bus.minutes < 1
 			p Your next bus comes in #{travel_model.next_bus.seconds} seconds
 		else
 			p Your next bus comes in #{travel_model.next_bus.minutes} minutes
 		
-	.col-md-6
+	.col-md-6(style='position:relative;bottom:-60px;')
 		- var times = "";
 		each prediction in travel_model.other_buses
 			- times += prediction.minutes + ", ";

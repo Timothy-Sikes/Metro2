@@ -1,16 +1,18 @@
 extend default
 
 block content
-	.col-md-6
+
+	.jumbotron(style='position:relative;bottom:-60px;') Please select an arrival and destination!
+	.col-md-6(style='position:relative;bottom:-60px;')
 		h3 Departure
 		select(id='departureSelect')
 			each stop in items
 				Option(value=stop.id) #{stop.display_name}
-	.col-md-6
+	.col-md-6(style='position:relative;bottom:-60px;')
 		h3 Arrival
 		select(id='arrivalSelect')
 			each stop in items
 				Option(value=stop.id) #{stop.display_name}
-	.col-md-6
+	.col-md-6(style='position:relative;bottom:-60px;')
 		button(class='button-primary', id='button', onclick='submitStops()') Submit
 		

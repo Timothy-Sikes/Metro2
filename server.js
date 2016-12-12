@@ -48,7 +48,8 @@ app.get('/blurp', function(req, res, next) {
   try {
     function callback(data)
     {
-      var html = blurpTemplate({"data" : data.body });
+      console.log(data.body);
+      var html = blurpTemplate(JSON.parse(data.body));
       res.send(html);
     }
     getStops.getStops2(callback);

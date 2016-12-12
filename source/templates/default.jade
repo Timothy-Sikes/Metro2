@@ -5,6 +5,7 @@ html
     link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
     link(rel='text/javascript', href='/scripts/metro.js')
     link(rel='text/javascript', href='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
+
     title #{title}
   body
     .header
@@ -18,3 +19,10 @@ html
     
     .main-content
       block content
+
+   script.
+      function submitStops() {
+        var departure = $('#departureSelect').value;
+        var arrival = $('#arrivalSelect').value;
+
+        window.location.href = "/home/route?departure=" + departure + "&arrival=" + arrival; }  

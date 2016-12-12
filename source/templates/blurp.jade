@@ -12,5 +12,5 @@ block content
 			each stop in items
 				Option(value=stop.id) #{stop.display_name}
 	.col-md-6
-		button(.btn-primary, on-click="submitStops") Submit
+		button(class='button-primary', id='button', onclick='submitStops()') Submit
 		

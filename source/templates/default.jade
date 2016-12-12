@@ -22,7 +22,18 @@ html
 
    script.
       function submitStops() {
-        var departure = $('#departureSelect').value;
-        var arrival = $('#arrivalSelect').value;
+          var departure = $('#departureSelect').value;
+          var arrival = $('#arrivalSelect').value;
 
-        window.location.href = "/home/route?departure=" + departure + "&arrival=" + arrival; }  
+          window.location.href = "/travel?departure=" + departure + "&arrival=" + arrival; 
+      }
+      
+      $(document).ready(function() {
+        function submitStops() {
+          var departure = $('#departureSelect').value;
+          var arrival = $('#arrivalSelect').value;
+
+          window.location.href = "/travel?departure=" + departure + "&arrival=" + arrival; 
+        }  
+        $('button').click(function() { submitStops(); });
+        });

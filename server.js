@@ -9,8 +9,10 @@ var express = require('express')
   ,stopTemplate = require('jade').compileFile(__dirname + '/source/templates/stop.jade')
   ,stopsTemplate = require('jade').compileFile(__dirname + '/source/templates/stops.jade')
   ,blurpTemplate = require('jade').compileFile(__dirname + '/source/templates/blurp.jade')
-
+  ,travelTemplate = require('jade').compileFile(__dirname + '/source/templates/travel.jade')
+  
 var getStops = require(__dirname + '/source/controllers/stops.js');
+var routeId = 704;
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -46,15 +48,18 @@ app.get('/test', function(req, res, next) {
 
 app.get('/blurp', function(req, res, next) {
   try {
-    function callback(data)
+     var departure;
+     var arrival;
+    function callback1(data)
     {
-      console.log(data.body);
-      var html = blurpTemplate(JSON.parse(data.body));
+      departure = JSON.parse(data.body);
+      console.log(departure);
+      var html = blurpTemplate(departure);
       res.send(html);
     }
-    getStops.getStops2(callback);
+    getStops.getStops2(callback1, routeId);
   } catch (e) {
-    next(e)
+    next(e);
   }
 })
 
@@ -70,6 +75,71 @@ app.get('/stops', function(req, res, next) {
       });
       res.send(html)
   } catch (e) {
+    next(e)
+  }
+})
+
+app.get('/travel', function(req, res, next){
+  try{
+    var departure;
+    var arrival;
+    var prediction;
+    function callback1(data)
+    {
+      console.log(data);
+      departure = data.body;
+      getStops.getStop(callback2, req.param('arrival'));
+    }
+    function callback2(data)
+    {
+      console.log(data);
+      arrival = data.body;
+      console.log({"departure" : JSON.parse(departure), "arrival" : JSON.parse(arrival) });
+      getStops.getPrediction(callback3, routeId, req.param('departure'));
+    }
+    function callback3(data)
+    {
+      console.log(data);
+      prediction = JSON.parse(data.body);
+      console.log(prediction);
+      var travelInfo = getStops.getTravelInfo();
+      console.log("before new JSON");
+      console.log(travelInfo['message']);
+      console.log(travelInfo['duration']);
+      console.log(prediction["items"][0]);
+      console.log('length + ' + prediction['items'].length);
+      console.log(prediction['items'].slice(1, 3));
+      console.log({
+          "travel_model" : {
+            "departure" : JSON.parse(departure),
+            "arrival" : JSON.parse(arrival),
+            "message" : travelInfo['message'],
+            "duration" : travelInfo['duration'],
+            'next_bus' : { "seconds" : prediction['items'][0]['seconds'], "minutes" : prediction['items'][0]['minutes'] },
+            'other_buses' : prediction['items'].slice(1, prediction['items'].length)
+          }
+          }
+          );
+      var html = travelTemplate(
+        {
+          "travel_model" : {
+            "departure" : JSON.parse(departure),
+            "arrival" : JSON.parse(arrival),
+            "message" : travelInfo['message'],
+            "duration" : travelInfo['duration'],
+            'next_bus' : { "seconds" : prediction['items'][0]['seconds'], "minutes" : prediction['items'][0]['minutes'] },
+            'other_buses' : prediction['items'].slice(1, prediction['items'].length)
+          }
+          });
+      res.send(html);
+    }
+    
+    getStops.getStop(callback1, req.param('departure'));
+    
+    //var html = travelTemplate({ "arrival" : {"display_name" : "test", "id" : req.param('departure') }, "departure" : {  "display_name" : "tesing", "id" : "4" } })
+    //  res.send(html);
+  }
+  catch(e) {
     next(e)
   }
 })
